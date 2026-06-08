@@ -1,0 +1,6 @@
+model,suite,tests_passed,tests_total,steps_passed,steps_total,step_rate,gate
+qwen/qwen3.6-27b,memory_only,0,4,6,20,0.300,excluded
+qwen/qwen3.6-27b,assistant_responses,0,4,5,20,0.250,excluded
+google/gemma-4-12b,memory_only,2,4,16,20,0.800,excluded
+google/gemma-4-12b,assistant_responses,0,4,11,20,0.550,excluded
+
