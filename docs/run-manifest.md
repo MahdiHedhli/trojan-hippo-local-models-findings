@@ -34,7 +34,7 @@ Server binding: loopback only.
 | target | `google/gemma-4-12b` | 131072 | Q4_K_M | excluded by utility gate |
 | embedding endpoint | `text-embedding-nomic-embed-text-v1.5` | 2048 | Q4_K_M | served locally; not validated for `mem0` or `rag` in this run |
 
-Serving-layer thinking mode was disabled for both target models by changing the local LM Studio model YAML `enableThinking` default to `false`. This was done because the first Qwen smoke run produced unbounded reasoning output and did not finish within the intended gate window. This is a serving-layer setting, not a harness-source change.
+Visible reasoning output was suppressed for both target models by changing the local LM Studio model YAML `enableThinking` default to `false`. This was done because the first Qwen smoke run produced reasoning-like output in the visible stream and did not finish within the intended gate window. This is a serving-layer output setting, not a harness-source change.
 
 ## Harness Config
 
@@ -53,6 +53,7 @@ Semantic judge:
 
 - local judge model: `qwen/qwen3.6-27b`
 - same judge used for both target-model utility runs
+- utility suites use `semantic_judge` and `cross_step_semantic_judge`
 - proxy enabled for `json_object` compatibility
 - judge was not switched mid-run after proxy validation
 - no hand-labeled judge-agreement set was completed during this run
@@ -75,3 +76,9 @@ Phase 2 and Phase 3:
 
 - not run
 - reason: no model passed Phase 1 utility, so ASR would be uninterpretable
+
+Follow-up artifact audit:
+
+- target-agent calls do not use `response_format`
+- no scored probe turn had empty `agent_response`
+- result failures correlate with missed or textual-only `update_memory` behavior

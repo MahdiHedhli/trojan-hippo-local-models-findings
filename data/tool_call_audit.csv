@@ -1,0 +1,5 @@
+run_date,model,suite,scored_probe_empty_responses,scored_probe_total,update_memory_tool_calls,textual_fake_tool_calls
+2026-06-08,qwen/qwen3.6-27b,memory_only,0,20,11,0
+2026-06-08,qwen/qwen3.6-27b,assistant_responses,0,20,6,3
+2026-06-08,google/gemma-4-12b,memory_only,0,20,26,0
+2026-06-08,google/gemma-4-12b,assistant_responses,0,20,16,0
