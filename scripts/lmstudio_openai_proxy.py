@@ -20,6 +20,7 @@ from urllib.request import Request, urlopen
 
 
 UPSTREAM_BASE_URL = os.environ.get("UPSTREAM_OPENAI_BASE_URL", "http://127.0.0.1:1234/v1").rstrip("/")
+UPSTREAM_AUTHORIZATION = os.environ.get("UPSTREAM_AUTHORIZATION")
 HOST = os.environ.get("LOCAL_PROXY_HOST", "127.0.0.1")
 PORT = int(os.environ.get("LOCAL_PROXY_PORT", "1235"))
 
@@ -67,6 +68,8 @@ class ProxyHandler(BaseHTTPRequestHandler):
             for key, value in self.headers.items()
             if key.lower() not in {"host", "content-length", "connection", "accept-encoding"}
         }
+        if UPSTREAM_AUTHORIZATION:
+            headers["Authorization"] = UPSTREAM_AUTHORIZATION
         if rewritten != body:
             print(f"rewrote unsupported json_object response_format for {self.path}", flush=True)
 

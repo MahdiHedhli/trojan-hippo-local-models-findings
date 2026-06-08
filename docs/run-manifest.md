@@ -22,7 +22,7 @@ Local proxy: `scripts/lmstudio_openai_proxy.py`
 
 Proxy purpose: LM Studio rejected OpenAI's legacy `response_format: {"type":"json_object"}` value. The proxy forwards all requests locally and removes only that unsupported field. This allowed the semantic judge to remain local.
 
-Authentication: dummy non-empty API key only; no real credential used.
+Authentication during run: LM Studio local-server auth was disabled on loopback, and the harness used a dummy non-empty API key only. Auth was restored after the run.
 
 Server binding: loopback only.
 
