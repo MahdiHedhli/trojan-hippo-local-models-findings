@@ -1,0 +1,3 @@
+run_date,model,check,direct_lm_studio_status,direct_lm_studio_result,proxy_status,proxy_result
+2026-06-08,qwen/qwen3.6-27b,response_format_json_object,400,"'response_format.type' must be 'json_schema' or 'text'",200,"returned {""ok"": true} with reasoning_len=0"
+2026-06-08,google/gemma-4-12b,response_format_json_object,400,"'response_format.type' must be 'json_schema' or 'text'",200,"returned {""ok"": true} with reasoning_len=0"

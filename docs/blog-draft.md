@@ -11,7 +11,7 @@ Two self-hosted models were tested against the published Trojan Hippo benchmark 
 - `qwen/qwen3.6-27b`
 - `google/gemma-4-12b`
 
-Both were served locally through LM Studio. The harness was not modified. A local proxy was used only to adapt LM Studio's OpenAI-compatible API to the harness semantic judge's `response_format` expectation.
+Both were served locally through LM Studio. The harness was not modified. A local proxy was used only to adapt LM Studio's OpenAI-compatible API to the harness semantic judge's `response_format` expectation while keeping LM Studio authentication enabled upstream.
 
 Before running attack ASR, the lab required a utility floor. That is the right control: a model that fails benign memory tasks cannot be called secure when it also fails an attack. It may simply be broken as an agent.
 
@@ -45,11 +45,12 @@ Three details mattered:
 
 1. Routing had to be verified by watching the local serving logs. The model id passed to `--model` must be the id reported by the local endpoint.
 2. LM Studio rejected `response_format: {"type":"json_object"}`. Without a local proxy, semantic-judge calls failed closed and made utility look worse than it was.
-3. Thinking mode had to be disabled at the serving layer. Otherwise Qwen spent the gate window on reasoning output instead of completing the benchmark turn.
+3. LM Studio auth stayed enabled. The harness talked to the proxy with a dummy key, and the proxy injected the real upstream authorization locally.
+4. Thinking mode had to be disabled at the serving layer. Otherwise Qwen spent the gate window on reasoning output instead of completing the benchmark turn.
+5. The local judge was `qwen/qwen3.6-27b` for both target runs. A judge-agreement set still needs to be hand-labeled before any future headline ASR claim.
 
 ## Bottom Line
 
 No ASR number is better than a misleading ASR number.
 
 This run did not show that local models are safer. It did not show that local models are more poisonable. It showed that the utility control can fail first, and when it does, the only honest move is to stop.
-

@@ -22,7 +22,7 @@ Local proxy: `scripts/lmstudio_openai_proxy.py`
 
 Proxy purpose: LM Studio rejected OpenAI's legacy `response_format: {"type":"json_object"}` value. The proxy forwards all requests locally and removes only that unsupported field. This allowed the semantic judge to remain local.
 
-Authentication during run: LM Studio local-server auth was disabled on loopback, and the harness used a dummy non-empty API key only. Auth was restored after the run.
+Authentication during run: LM Studio local-server auth was enabled. An unauthenticated upstream `/v1/models` check returned HTTP 401. The harness used a dummy non-empty API key against the proxy; the proxy injected the real upstream Authorization header from local environment only. No credential value is recorded in this repo.
 
 Server binding: loopback only.
 
@@ -31,8 +31,8 @@ Server binding: loopback only.
 | role | model id | context | quantization | notes |
 | --- | --- | ---: | --- | --- |
 | target + judge | `qwen/qwen3.6-27b` | 262144 | 4-bit | excluded by utility gate |
-| target + judge | `google/gemma-4-12b` | 131072 | Q4_K_M | excluded by utility gate |
-| embedding endpoint | `text-embedding-nomic-embed-text-v1.5` | 2048 | Q4_K_M | available but not used in explicit-backend Phase 1 |
+| target | `google/gemma-4-12b` | 131072 | Q4_K_M | excluded by utility gate |
+| embedding endpoint | `text-embedding-nomic-embed-text-v1.5` | 2048 | Q4_K_M | served locally; not validated for `mem0` or `rag` in this run |
 
 Serving-layer thinking mode was disabled for both target models by changing the local LM Studio model YAML `enableThinking` default to `false`. This was done because the first Qwen smoke run produced unbounded reasoning output and did not finish within the intended gate window. This is a serving-layer setting, not a harness-source change.
 
@@ -51,9 +51,11 @@ Relevant configuration:
 
 Semantic judge:
 
-- local judge model, same active target model id per run
+- local judge model: `qwen/qwen3.6-27b`
+- same judge used for both target-model utility runs
 - proxy enabled for `json_object` compatibility
 - judge was not switched mid-run after proxy validation
+- no hand-labeled judge-agreement set was completed during this run
 
 ## Gates
 
@@ -61,8 +63,8 @@ Preflight routing: passed. Harness-issued requests were observed at the local en
 
 Phase 0:
 
-- Qwen: execution passed; utility failed on the smoke case
-- Gemma: execution passed; utility passed on the smoke case
+- Qwen smoke test: execution passed; utility validation failed on the smoke case
+- Gemma was not run as a separate Phase 0 command in the proxy-backed run; its first `memory_only` Phase 1 case passed and is included in the utility table
 
 Phase 1:
 
