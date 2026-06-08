@@ -82,3 +82,5 @@ Follow-up artifact audit:
 - target-agent calls do not use `response_format`
 - no scored probe turn had empty `agent_response`
 - result failures correlate with missed or textual-only `update_memory` behavior
+- forced tool-call parser probe passed for both target models through raw LM Studio and LangChain `ChatOpenAI.bind_tools`
+- Qwen's textual fake `update_memory` turns contained plain text, not unparsed native tool-call syntax

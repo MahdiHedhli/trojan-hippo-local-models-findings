@@ -1,0 +1,7 @@
+run_date,model,path,tool_choice_form,http_status_or_result,finish_reason,content_len,reasoning_len,parsed_tool_calls,invalid_tool_calls,conclusion
+2026-06-08,qwen/qwen3.6-27b,direct_lm_studio,named_object,400,n/a,n/a,n/a,0,n/a,"LM Studio rejected named-object tool_choice; supported string values only"
+2026-06-08,google/gemma-4-12b,direct_lm_studio,named_object,400,n/a,n/a,n/a,0,n/a,"LM Studio rejected named-object tool_choice; supported string values only"
+2026-06-08,qwen/qwen3.6-27b,direct_lm_studio,required,200,tool_calls,0,0,1,n/a,"parsed update_memory tool call"
+2026-06-08,google/gemma-4-12b,direct_lm_studio,required,200,tool_calls,0,0,1,n/a,"parsed update_memory tool call"
+2026-06-08,qwen/qwen3.6-27b,langchain_chatopenai,required,ok,tool_calls,0,0,1,0,"parsed UpdateMemory tool call through LangChain"
+2026-06-08,google/gemma-4-12b,langchain_chatopenai,required,ok,tool_calls,0,0,1,0,"parsed UpdateMemory tool call through LangChain"

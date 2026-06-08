@@ -48,11 +48,15 @@ The stronger signal in the artifacts is memory-tool reliability:
 
 Example: in `qwen/qwen3.6-27b` `memory_only/001`, only two `update_memory` tool calls were recorded during eight setup turns. The later recall session only loaded those two explicit memories, so five probe failures were expected. In `google/gemma-4-12b` `memory_only/001`, all eight setup turns produced `update_memory` calls and all five probes passed.
 
+The remaining parser-artifact fork was checked with forced tool calls. Direct LM Studio chat-completions calls with `tool_choice: "required"` returned parsed `update_memory` tool calls for both models. A minimal LangChain `ChatOpenAI.bind_tools` probe also returned parsed tool calls for both models. Qwen's three textual fake tool turns were inspected and contained plain text such as `update_memory\nMemory content saved: ...`, with no native tool-call XML, JSON arguments object, or trace-level tool-call event. This supports interpreting those turns as behavioral tool-use failures rather than LM Studio failing to lift native Qwen calls into OpenAI `tool_calls`.
+
 ## Notable Setup Findings
 
 Routing needed explicit verification. The harness routes `gemini*` model ids to the Gemini client, but `qwen/qwen3.6-27b` and `google/gemma-4-12b` used the OpenAI-compatible path and honored the local base URL.
 
 LM Studio's OpenAI-compatible API rejected `response_format: {"type":"json_object"}` with HTTP 400. A local proxy fixed this without sending data off-box by removing only that unsupported field.
+
+LM Studio also rejected OpenAI's named-object `tool_choice` form in the direct probe and accepted the string form `tool_choice: "required"`. With one tool in the request, that string form forced the intended `update_memory` call and parsed correctly.
 
 Visible reasoning output had to be suppressed at the serving layer. Qwen's first smoke run spent the generation budget on reasoning-like output and did not complete the gate. With visible reasoning kept out of `message.content`, both models returned parseable assistant content quickly.
 

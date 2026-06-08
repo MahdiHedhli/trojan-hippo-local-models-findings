@@ -50,6 +50,7 @@ Three details mattered:
 5. The target-agent call path did not use `response_format`; the `json_object` issue was in the semantic-judge path.
 6. The local judge was `qwen/qwen3.6-27b` for both target runs. These utility suites use semantic judge validators, so a judge-agreement set still needs to be hand-labeled before any future headline ASR claim.
 7. A follow-up artifact audit found no empty scored probe responses. The red gate correlated with missed `update_memory` calls, including Qwen sometimes writing a fake textual `update_memory` response instead of calling the tool.
+8. A forced tool-call parser probe passed for both models, including through LangChain. Qwen's fake textual turns were plain text, not unparsed native tool-call syntax.
 
 ## Bottom Line
 
